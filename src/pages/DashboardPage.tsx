@@ -35,11 +35,11 @@ export default function DashboardPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-500">Total Pemasukan</span>
-            <span className="p-2 bg-emerald-50 rounded-lg text-emerald-600">
-              <TrendingUp className="w-5 h-5" />
+            <span className="text-sm font-medium text-income">Total Pemasukan</span>
+            <span className="p-2.5 bg-blue-50 rounded-xl text-blue-600">
+              <TrendingUp className="w-5 h-5 stroke-[2.5]" />
             </span>
           </div>
           <p className="mt-3 text-2xl font-bold text-income">
@@ -47,11 +47,11 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-500">Total Pengeluaran</span>
-            <span className="p-2 bg-red-50 rounded-lg text-red-600">
-              <TrendingDown className="w-5 h-5" />
+            <span className="text-sm font-medium text-expense">Total Pengeluaran</span>
+            <span className="p-2.5 bg-orange-50 rounded-xl text-orange-500">
+              <TrendingDown className="w-5 h-5 stroke-[2.5]" />
             </span>
           </div>
           <p className="mt-3 text-2xl font-bold text-expense">
@@ -59,17 +59,16 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-500">Sisa Saldo</span>
-            <span className="p-2 bg-slate-100 rounded-lg text-slate-700">
+            <span className="text-sm font-medium text-orange-600">Sisa Saldo</span>
+            <span className="p-2.5 bg-orange-600 rounded-xl text-white">
               <Wallet className="w-5 h-5" />
             </span>
           </div>
           <p
-            className={`mt-3 text-2xl font-bold ${
-              balance >= 0 ? "text-slate-900" : "text-red-600"
-            }`}
+            className={`mt-3 text-2xl font-bold ${balance >= 0 ? "text-slate-900" : "text-orange-600"
+              }`}
           >
             {formatCurrency(balance)}
           </p>
@@ -80,12 +79,12 @@ export default function DashboardPage() {
       <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div>
-            <h2 className="font-semibold text-slate-900">Transaksi Terakhir</h2>
+            <h2 className="font-semibold text-orange-600">Transaksi Terakhir</h2>
             <p className="text-xs text-slate-500">5 catatan keuangan yang baru saja dibuat</p>
           </div>
           <Link
             to="/transactions"
-            className="flex items-center gap-1 text-xs font-medium text-slate-700 hover:text-slate-900"
+            className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
           >
             Lihat Semua
             <ArrowRight className="w-3.5 h-3.5" />
@@ -100,14 +99,15 @@ export default function DashboardPage() {
             >
               <div className="flex items-center gap-3">
                 <span
-                  className={`p-2 rounded-lg ${
-                    t.type === "income" ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"
-                  }`}
+                  className={`p-2 rounded-xl ${t.type === "income"
+                    ? "bg-blue-50 text-blue-600"
+                    : "bg-orange-50 text-orange-500"
+                    }`}
                 >
                   {t.type === "income" ? (
-                    <ArrowDownLeft className="w-4 h-4" />
+                    <ArrowDownLeft className="w-4 h-4 stroke-[2.5]" />
                   ) : (
-                    <ArrowUpRight className="w-4 h-4" />
+                    <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
                   )}
                 </span>
                 <div>
@@ -121,9 +121,8 @@ export default function DashboardPage() {
               </div>
 
               <div
-                className={`text-sm font-bold ${
-                  t.type === "income" ? "text-income" : "text-expense"
-                }`}
+                className={`text-sm font-bold ${t.type === "income" ? "text-income" : "text-expense"
+                  }`}
               >
                 {t.type === "income" ? "+" : "-"}
                 {formatCurrency(t.amount)}

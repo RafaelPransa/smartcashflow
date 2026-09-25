@@ -126,8 +126,8 @@ export default function TransactionsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedType("expense")}
-                className={`px-2.5 py-1 rounded-md transition ${
-                  selectedType === "expense" ? "bg-red-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
+                className={`px-2.5 py-1 rounded-md transition font-medium ${
+                  selectedType === "expense" ? "bg-orange-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 Pengeluaran
@@ -135,8 +135,8 @@ export default function TransactionsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedType("income")}
-                className={`px-2.5 py-1 rounded-md transition ${
-                  selectedType === "income" ? "bg-emerald-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
+                className={`px-2.5 py-1 rounded-md transition font-medium ${
+                  selectedType === "income" ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 Pemasukan
@@ -185,9 +185,9 @@ export default function TransactionsPage() {
       </div>
 
       {statusMessage && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-2.5 rounded-lg flex items-center justify-between">
+        <div className="bg-blue-50 border border-blue-200 text-blue-900 text-sm px-4 py-2.5 rounded-lg flex items-center justify-between">
           <span>{statusMessage}</span>
-          <button onClick={() => setStatusMessage(null)} className="text-emerald-600 font-bold">&times;</button>
+          <button onClick={() => setStatusMessage(null)} className="text-blue-600 font-bold">&times;</button>
         </div>
       )}
 
@@ -211,10 +211,10 @@ export default function TransactionsPage() {
           <div className="flex items-center justify-between text-xs text-slate-500 px-1">
             <span>Menampilkan <strong>{filteredItems.length}</strong> transaksi</span>
             <div className="flex items-center gap-4">
-              <span className="text-emerald-700 font-medium">
+              <span className="text-blue-600 font-semibold">
                 + {formatCurrency(totalFilteredIncome)}
               </span>
-              <span className="text-red-600 font-medium">
+              <span className="text-orange-600 font-semibold">
                 - {formatCurrency(totalFilteredExpense)}
               </span>
             </div>
@@ -246,9 +246,9 @@ export default function TransactionsPage() {
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className="inline-flex items-center gap-1.5 font-medium text-slate-800">
                           {t.type === "income" ? (
-                            <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-600" />
+                            <ArrowDownLeft className="w-3.5 h-3.5 text-blue-600 stroke-[2.5]" />
                           ) : (
-                            <ArrowUpRight className="w-3.5 h-3.5 text-red-500" />
+                            <ArrowUpRight className="w-3.5 h-3.5 text-orange-500 stroke-[2.5]" />
                           )}
                           {categoryName(t.categoryId)}
                         </span>

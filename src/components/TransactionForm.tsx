@@ -13,6 +13,15 @@ interface Props {
   onCancelEdit?: () => void;
 }
 
+const PRESET_AMOUNTS = [
+  { label: "Rp 10.000", value: 10000 },
+  { label: "Rp 20.000", value: 20000 },
+  { label: "Rp 50.000", value: 50000 },
+  { label: "Rp 100.000", value: 100000 },
+  { label: "Rp 200.000", value: 200000 },
+  { label: "Rp 300.000", value: 300000 },
+];
+
 export function TransactionForm({
   categories,
   editingTransaction,
@@ -24,6 +33,7 @@ export function TransactionForm({
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<TransactionFormValues>({
     resolver: zodResolver(transactionSchema),
@@ -34,6 +44,7 @@ export function TransactionForm({
   });
 
   const activeType = watch("type");
+  const currentAmount = watch("amount");
   const filteredCategories = categories.filter((c) => c.type === activeType);
 
   useEffect(() => {
@@ -92,11 +103,33 @@ export function TransactionForm({
       </div>
 
       <div className="flex gap-2">
-        <label className="flex-1 text-sm font-medium text-slate-700 flex items-center gap-1.5 cursor-pointer">
-          <input type="radio" value="expense" {...register("type")} /> Pengeluaran
+        <label
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border text-sm font-semibold cursor-pointer transition ${activeType === "expense"
+              ? "bg-orange-500 text-white border-orange-500 shadow-sm"
+              : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+            }`}
+        >
+          <input
+            type="radio"
+            value="expense"
+            className="hidden"
+            {...register("type")}
+          />
+          Pengeluaran
         </label>
-        <label className="flex-1 text-sm font-medium text-slate-700 flex items-center gap-1.5 cursor-pointer">
-          <input type="radio" value="income" {...register("type")} /> Pemasukan
+        <label
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border text-sm font-semibold cursor-pointer transition ${activeType === "income"
+              ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+              : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+            }`}
+        >
+          <input
+            type="radio"
+            value="income"
+            className="hidden"
+            {...register("type")}
+          />
+          Pemasukan
         </label>
       </div>
 
@@ -106,12 +139,37 @@ export function TransactionForm({
           type="number"
           step="1"
           placeholder="Contoh: 50000"
-          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+          min="0"
+          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           {...register("amount")}
         />
         {errors.amount && (
           <p className="mt-1 text-xs text-red-600">{errors.amount.message}</p>
         )}
+
+        {/* 6 Kotak Nominal Cepat (2 baris x 3 kolom) */}
+        <div className="mt-2 grid grid-cols-3 gap-1.5">
+          {PRESET_AMOUNTS.map((item) => {
+            const isSelected = Number(currentAmount) === item.value;
+            return (
+              <button
+                key={item.value}
+                type="button"
+                onClick={() =>
+                  setValue("amount", item.value, { shouldValidate: true })
+                }
+                className={`rounded-lg border py-1.5 px-2 text-xs transition text-center font-medium ${isSelected
+                    ? activeType === "expense"
+                      ? "border-orange-500 bg-orange-500 text-white font-semibold shadow-sm"
+                      : "border-blue-600 bg-blue-600 text-white font-semibold shadow-sm"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 active:scale-95"
+                  }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div>
@@ -164,7 +222,7 @@ export function TransactionForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 rounded-lg bg-slate-900 py-2 text-sm font-medium text-white hover:bg-slate-800 transition"
+          className="flex-1 rounded-lg bg-orange-600 py-2 text-sm font-medium text-white hover:bg-slate-800 transition"
         >
           {editingTransaction ? "Simpan Perubahan" : "Simpan Transaksi"}
         </button>

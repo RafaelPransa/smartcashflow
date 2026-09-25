@@ -27,14 +27,14 @@ interface CategoryBreakdown {
 }
 
 const DEFAULT_COLORS = [
-  "#dc2626",
-  "#ea580c",
-  "#d97706",
-  "#2563eb",
-  "#7c3aed",
-  "#db2777",
-  "#059669",
-  "#64748b",
+  "#f97316", // Orange 500
+  "#2563eb", // Blue 600
+  "#ea580c", // Orange 600
+  "#3b82f6", // Blue 500
+  "#fb923c", // Orange 400
+  "#60a5fa", // Blue 400
+  "#f59e0b", // Amber 500
+  "#0f172a", // Slate 900
 ];
 
 export default function ChartsPage() {
@@ -116,8 +116,8 @@ export default function ChartsPage() {
                 }}
               />
               <Legend />
-              <Bar dataKey="income" name="Pemasukan" fill="#16a34a" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expense" name="Pengeluaran" fill="#dc2626" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="income" name="Pemasukan" fill="#2563eb" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expense" name="Pengeluaran" fill="#f97316" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

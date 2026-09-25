@@ -11,8 +11,7 @@ import {
 } from "lucide-react";
 
 const desktopNavItemClass = ({ isActive }: { isActive: boolean }) =>
-  `px-4 py-2 rounded-lg text-sm font-medium transition ${
-    isActive ? "bg-slate-900 text-white" : "text-slate-600 hover:bg-slate-100"
+  `px-4 py-2 rounded-lg text-sm font-medium transition ${isActive ? "bg-orange-500 text-white" : "text-slate-600 hover:bg-orange-100"
   }`;
 
 const navItems = [
@@ -29,12 +28,9 @@ export default function App() {
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-sm font-bold text-white shadow-sm">
-              FC
-            </span>
             <div>
-              <h1 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
-                SmartCashFlow
+              <h1 className="text-base sm:text-lg font-bold text-blue-600 leading-tight">
+                Smart<span className="text-orange-500">CashFlow</span>
               </h1>
               <p className="text-[10px] text-slate-400 font-medium sm:hidden">
                 Pencatatan Keuangan
@@ -78,23 +74,21 @@ export default function App() {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition duration-150 ${
-                  isActive
-                    ? "text-slate-950 font-semibold"
-                    : "text-slate-400 hover:text-slate-600 active:scale-95"
+                `flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition duration-150 ${isActive
+                  ? "text-orange-500 font-semibold"
+                  : "text-slate-400 hover:text-slate-600 active:scale-95"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   <div
-                    className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all ${
-                      isActive ? "bg-slate-100 text-slate-950 scale-105" : ""
-                    }`}
+                    className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all ${isActive ? "bg-orange-50 text-orange-500 scale-105" : ""
+                      }`}
                   >
                     <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.75]"}`} />
                   </div>
-                  <span className={`text-[11px] leading-tight mt-0.5 ${isActive ? "font-semibold text-slate-950" : ""}`}>
+                  <span className={`text-[11px] leading-tight mt-0.5 ${isActive ? "font-semibold text-orange-500" : ""}`}>
                     {item.label}
                   </span>
                 </>

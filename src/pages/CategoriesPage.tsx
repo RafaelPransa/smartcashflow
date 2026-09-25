@@ -108,7 +108,7 @@ export default function CategoriesPage() {
       {/* Header and Add button */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Manajemen Kategori</h1>
+          <h1 className="text-xl font-bold text-orange-600">Manajemen Kategori</h1>
           <p className="text-sm text-slate-500">
             Kelola kategori pemasukan dan pengeluaran sesuai kebutuhan Anda
           </p>
@@ -134,11 +134,10 @@ export default function CategoriesPage() {
             setActiveTab("expense");
             if (isCreating) setType("expense");
           }}
-          className={`px-4 py-2.5 text-sm font-semibold transition border-b-2 ${
-            activeTab === "expense"
-              ? "border-red-600 text-red-600"
+          className={`px-4 py-2.5 text-sm font-semibold transition border-b-2 ${activeTab === "expense"
+              ? "border-orange-500 text-orange-600"
               : "border-transparent text-slate-500 hover:text-slate-700"
-          }`}
+            }`}
         >
           Kategori Pengeluaran ({categories.filter((c) => c.type === "expense").length})
         </button>
@@ -148,11 +147,10 @@ export default function CategoriesPage() {
             setActiveTab("income");
             if (isCreating) setType("income");
           }}
-          className={`px-4 py-2.5 text-sm font-semibold transition border-b-2 ${
-            activeTab === "income"
-              ? "border-emerald-600 text-emerald-600"
+          className={`px-4 py-2.5 text-sm font-semibold transition border-b-2 ${activeTab === "income"
+              ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-500 hover:text-slate-700"
-          }`}
+            }`}
         >
           Kategori Pemasukan ({categories.filter((c) => c.type === "income").length})
         </button>
@@ -182,21 +180,33 @@ export default function CategoriesPage() {
               <div>
                 <label className="text-sm font-medium text-slate-700">Tipe</label>
                 <div className="mt-1 flex gap-2">
-                  <label className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border text-sm font-medium cursor-pointer transition">
+                  <label
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border text-sm font-semibold cursor-pointer transition ${type === "expense"
+                        ? "bg-orange-500 text-white border-orange-500 shadow-sm"
+                        : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                      }`}
+                  >
                     <input
                       type="radio"
                       name="catType"
                       value="expense"
+                      className="hidden"
                       checked={type === "expense"}
                       onChange={() => setType("expense")}
                     />
                     Pengeluaran
                   </label>
-                  <label className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border text-sm font-medium cursor-pointer transition">
+                  <label
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border text-sm font-semibold cursor-pointer transition ${type === "income"
+                        ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                        : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                      }`}
+                  >
                     <input
                       type="radio"
                       name="catType"
                       value="income"
+                      className="hidden"
                       checked={type === "income"}
                       onChange={() => setType("income")}
                     />
@@ -252,11 +262,10 @@ export default function CategoriesPage() {
                         type="button"
                         onClick={() => setIcon(item.name)}
                         title={item.label}
-                        className={`p-2 rounded-lg flex items-center justify-center transition ${
-                          isSelected
+                        className={`p-2 rounded-lg flex items-center justify-center transition ${isSelected
                             ? "bg-slate-900 text-white shadow-sm"
                             : "text-slate-600 hover:bg-slate-100"
-                        }`}
+                          }`}
                       >
                         <IconComp className="w-4 h-4" />
                       </button>

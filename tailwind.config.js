@@ -4,8 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        income: "#16a34a",
-        expense: "#dc2626",
+        income: "#2563eb", // Vibrant Blue
+        expense: "#f97316", // Vibrant Orange
+        brand: {
+          blue: "#2563eb",
+          "blue-light": "#eff6ff",
+          orange: "#f97316",
+          "orange-light": "#fff7ed",
+          dark: "#0f172a",
+        },
       },
     },
   },

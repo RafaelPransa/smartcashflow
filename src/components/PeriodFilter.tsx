@@ -63,11 +63,10 @@ export function PeriodFilter({ activePreset: propActivePreset, onChange: propOnC
               key={opt.value}
               type="button"
               onClick={() => handleSelectPreset(opt.value)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                currentPreset === opt.value
-                  ? "bg-slate-900 text-white shadow-sm"
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${currentPreset === opt.value
+                  ? "bg-orange-600 text-white shadow-sm"
                   : "bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
+                }`}
             >
               {opt.label}
             </button>
@@ -113,7 +112,7 @@ export function PeriodFilter({ activePreset: propActivePreset, onChange: propOnC
 
           <button
             type="submit"
-            className="flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white transition"
+            className="flex items-center gap-1 rounded-lg bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 text-sm font-semibold text-white transition shadow-sm"
           >
             <Check className="w-4 h-4" />
             Terapkan
