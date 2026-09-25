@@ -67,7 +67,7 @@ export default function DashboardPage() {
             </span>
           </div>
           <p
-            className={`mt-3 text-2xl font-bold ${balance >= 0 ? "text-slate-900" : "text-orange-600"
+            className={`mt-3 text-2xl font-bold ${balance >= 0 ? "text-orange-600" : "text-orange-600"
               }`}
           >
             {formatCurrency(balance)}
@@ -84,7 +84,7 @@ export default function DashboardPage() {
           </div>
           <Link
             to="/transactions"
-            className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
+            className="flex items-center gap-1 text-xs font-semibold text-orange-600 hover:text-orange-700"
           >
             Lihat Semua
             <ArrowRight className="w-3.5 h-3.5" />
@@ -133,7 +133,7 @@ export default function DashboardPage() {
           {recentTransactions.length === 0 && (
             <div className="py-10 text-center text-sm text-slate-400">
               Belum ada transaksi. Silakan tambah transaksi di halaman{" "}
-              <Link to="/transactions" className="text-blue-600 hover:underline">
+              <Link to="/transactions" className="text-orange-600 hover:underline">
                 Transaksi
               </Link>
               .

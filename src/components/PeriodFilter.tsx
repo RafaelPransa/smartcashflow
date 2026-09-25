@@ -85,10 +85,11 @@ export function PeriodFilter({ activePreset: propActivePreset, onChange: propOnC
           className="flex flex-wrap items-end gap-3 pt-2 border-t border-slate-100"
         >
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label htmlFor="filter-start-date" className="block text-xs font-medium text-slate-600 mb-1">
               Dari Tanggal
             </label>
             <input
+              id="filter-start-date"
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
@@ -98,10 +99,11 @@ export function PeriodFilter({ activePreset: propActivePreset, onChange: propOnC
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label htmlFor="filter-end-date" className="block text-xs font-medium text-slate-600 mb-1">
               Sampai Tanggal
             </label>
             <input
+              id="filter-end-date"
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}

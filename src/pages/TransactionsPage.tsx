@@ -8,6 +8,7 @@ import { TransactionForm } from "@/components/TransactionForm";
 import { PeriodFilter } from "@/components/PeriodFilter";
 import { formatCurrency } from "@/utils/format";
 import { exportToCSV, exportToJSON, importFromJSON } from "@/utils/exportImport";
+import { ConfirmModal } from "@/components/ConfirmModal";
 import {
   Pencil,
   Trash2,
@@ -23,6 +24,7 @@ export default function TransactionsPage() {
   const categories = useLiveQuery(() => db.categories.toArray(), []) ?? [];
   const [items, setItems] = useState<Transaction[]>([]);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [deletingTransaction, setDeletingTransaction] = useState<Transaction | null>(null);
 
   // Filter & Search states
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,17 +42,13 @@ export default function TransactionsPage() {
   const categoryMap = new Map(categories.map((c) => [c.id, c.name]));
   const categoryName = (id: number) => categoryMap.get(id) ?? "-";
 
-  const handleDelete = async (t: Transaction) => {
-    if (!t.id) return;
-    const confirmed = window.confirm(
-      `Apakah Anda yakin ingin menghapus transaksi "${categoryName(t.categoryId)}" sebesar ${formatCurrency(t.amount)}?`
-    );
-    if (!confirmed) return;
-
-    await db.transactions.delete(t.id);
-    if (editingTransaction?.id === t.id) {
+  const handleConfirmDelete = async () => {
+    if (!deletingTransaction?.id) return;
+    await db.transactions.delete(deletingTransaction.id);
+    if (editingTransaction?.id === deletingTransaction.id) {
       setEditingTransaction(null);
     }
+    setDeletingTransaction(null);
     reload();
     showToast("Transaksi berhasil dihapus.");
   };
@@ -117,27 +115,24 @@ export default function TransactionsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedType("all")}
-                className={`px-2.5 py-1 rounded-md transition ${
-                  selectedType === "all" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"
-                }`}
+                className={`px-2.5 py-1 rounded-md transition ${selectedType === "all" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"
+                  }`}
               >
                 Semua
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedType("expense")}
-                className={`px-2.5 py-1 rounded-md transition font-medium ${
-                  selectedType === "expense" ? "bg-orange-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
-                }`}
+                className={`px-2.5 py-1 rounded-md transition font-medium ${selectedType === "expense" ? "bg-orange-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
+                  }`}
               >
                 Pengeluaran
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedType("income")}
-                className={`px-2.5 py-1 rounded-md transition font-medium ${
-                  selectedType === "income" ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
-                }`}
+                className={`px-2.5 py-1 rounded-md transition font-medium ${selectedType === "income" ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
+                  }`}
               >
                 Pemasukan
               </button>
@@ -236,9 +231,8 @@ export default function TransactionsPage() {
                   {filteredItems.map((t) => (
                     <tr
                       key={t.id}
-                      className={`hover:bg-slate-50 transition ${
-                        editingTransaction?.id === t.id ? "bg-amber-50" : ""
-                      }`}
+                      className={`hover:bg-slate-50 transition ${editingTransaction?.id === t.id ? "bg-amber-50" : ""
+                        }`}
                     >
                       <td className="px-4 py-3 whitespace-nowrap text-slate-600 font-mono text-xs">
                         {t.date}
@@ -257,9 +251,8 @@ export default function TransactionsPage() {
                         {t.note || "-"}
                       </td>
                       <td
-                        className={`px-4 py-3 text-right font-medium whitespace-nowrap ${
-                          t.type === "income" ? "text-income font-semibold" : "text-expense font-semibold"
-                        }`}
+                        className={`px-4 py-3 text-right font-medium whitespace-nowrap ${t.type === "income" ? "text-income font-semibold" : "text-expense font-semibold"
+                          }`}
                       >
                         {t.type === "income" ? "+" : "-"}
                         {formatCurrency(t.amount)}
@@ -267,6 +260,7 @@ export default function TransactionsPage() {
                       <td className="px-4 py-3 text-center whitespace-nowrap">
                         <div className="flex items-center justify-center gap-1">
                           <button
+                            aria-label="Edit Transaksi"
                             type="button"
                             onClick={() => setEditingTransaction(t)}
                             title="Edit Transaksi"
@@ -275,8 +269,9 @@ export default function TransactionsPage() {
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
+                            aria-label="Hapus Transaksi"
                             type="button"
-                            onClick={() => handleDelete(t)}
+                            onClick={() => setDeletingTransaction(t)}
                             title="Hapus Transaksi"
                             className="p-1.5 text-red-400 hover:text-red-700 hover:bg-red-50 rounded-lg transition"
                           >
@@ -299,6 +294,28 @@ export default function TransactionsPage() {
           </div>
         </div>
       </div>
+
+      {/* Pop Up Modal Konfirmasi Hapus Transaksi */}
+      <ConfirmModal
+        isOpen={!!deletingTransaction}
+        title="Hapus Transaksi"
+        message={
+          deletingTransaction ? (
+            <p>
+              Apakah Anda yakin ingin menghapus transaksi{" "}
+              <strong>"{categoryName(deletingTransaction.categoryId)}"</strong> sebesar{" "}
+              <strong className="text-orange-600">
+                {formatCurrency(deletingTransaction.amount)}
+              </strong>
+              ? Data ini akan dihapus permanen dari riwayat pencatatan.
+            </p>
+          ) : null
+        }
+        confirmText="Hapus Transaksi"
+        cancelText="Batal"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeletingTransaction(null)}
+      />
     </div>
   );
 }

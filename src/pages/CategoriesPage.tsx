@@ -3,6 +3,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import type { Category, TransactionType } from "@/types/finance";
 import { CategoryIcon, AVAILABLE_ICONS, PRESET_COLORS } from "@/components/CategoryIcon";
+import { ConfirmModal } from "@/components/ConfirmModal";
 import { Pencil, Trash2, Plus, X, Check } from "lucide-react";
 
 export default function CategoriesPage() {
@@ -11,6 +12,7 @@ export default function CategoriesPage() {
 
   const [activeTab, setActiveTab] = useState<TransactionType>("expense");
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
   // Form states
@@ -84,24 +86,19 @@ export default function CategoriesPage() {
     cancelForm();
   };
 
-  const handleDelete = async (cat: Category) => {
-    if (!cat.id) return;
-    const usageCount = transactions.filter((t) => t.categoryId === cat.id).length;
-
-    let confirmMsg = `Hapus kategori "${cat.name}"?`;
-    if (usageCount > 0) {
-      confirmMsg = `Kategori "${cat.name}" digunakan oleh ${usageCount} transaksi. Jika dihapus, transaksi tersebut tetap tersimpan tetapi tidak memiliki kategori. Yakin ingin menghapus?`;
-    }
-
-    if (!window.confirm(confirmMsg)) return;
-
-    await db.categories.delete(cat.id);
-    if (editingCategory?.id === cat.id) {
+  const handleConfirmDeleteCategory = async () => {
+    if (!deletingCategory?.id) return;
+    await db.categories.delete(deletingCategory.id);
+    if (editingCategory?.id === deletingCategory.id) {
       cancelForm();
     }
+    setDeletingCategory(null);
   };
 
   const filteredCategories = categories.filter((c) => c.type === activeTab);
+  const deletingCategoryUsage = deletingCategory?.id
+    ? transactions.filter((t) => t.categoryId === deletingCategory.id).length
+    : 0;
 
   return (
     <div className="space-y-6">
@@ -135,8 +132,8 @@ export default function CategoriesPage() {
             if (isCreating) setType("expense");
           }}
           className={`px-4 py-2.5 text-sm font-semibold transition border-b-2 ${activeTab === "expense"
-              ? "border-orange-500 text-orange-600"
-              : "border-transparent text-slate-500 hover:text-slate-700"
+            ? "border-orange-500 text-orange-600"
+            : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
         >
           Kategori Pengeluaran ({categories.filter((c) => c.type === "expense").length})
@@ -148,8 +145,8 @@ export default function CategoriesPage() {
             if (isCreating) setType("income");
           }}
           className={`px-4 py-2.5 text-sm font-semibold transition border-b-2 ${activeTab === "income"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-500 hover:text-slate-700"
+            ? "border-blue-600 text-blue-600"
+            : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
         >
           Kategori Pemasukan ({categories.filter((c) => c.type === "income").length})
@@ -182,8 +179,8 @@ export default function CategoriesPage() {
                 <div className="mt-1 flex gap-2">
                   <label
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border text-sm font-semibold cursor-pointer transition ${type === "expense"
-                        ? "bg-orange-500 text-white border-orange-500 shadow-sm"
-                        : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                      ? "bg-orange-500 text-white border-orange-500 shadow-sm"
+                      : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
                       }`}
                   >
                     <input
@@ -198,8 +195,8 @@ export default function CategoriesPage() {
                   </label>
                   <label
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border text-sm font-semibold cursor-pointer transition ${type === "income"
-                        ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                        : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                      ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                      : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
                       }`}
                   >
                     <input
@@ -263,8 +260,8 @@ export default function CategoriesPage() {
                         onClick={() => setIcon(item.name)}
                         title={item.label}
                         className={`p-2 rounded-lg flex items-center justify-center transition ${isSelected
-                            ? "bg-slate-900 text-white shadow-sm"
-                            : "text-slate-600 hover:bg-slate-100"
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "text-slate-600 hover:bg-slate-100"
                           }`}
                       >
                         <IconComp className="w-4 h-4" />
@@ -320,6 +317,7 @@ export default function CategoriesPage() {
 
                   <div className="flex items-center gap-1">
                     <button
+                      aria-label="Edit Kategori"
                       type="button"
                       onClick={() => startEdit(cat)}
                       title="Edit Kategori"
@@ -328,8 +326,9 @@ export default function CategoriesPage() {
                       <Pencil className="w-4 h-4" />
                     </button>
                     <button
+                      aria-label="Hapus Kategori"
                       type="button"
-                      onClick={() => handleDelete(cat)}
+                      onClick={() => setDeletingCategory(cat)}
                       title="Hapus Kategori"
                       className="p-1.5 text-red-400 hover:text-red-700 hover:bg-red-50 rounded-lg transition"
                     >
@@ -348,6 +347,32 @@ export default function CategoriesPage() {
           </div>
         </div>
       </div>
+
+      {/* Pop Up Modal Konfirmasi Hapus Kategori */}
+      <ConfirmModal
+        isOpen={!!deletingCategory}
+        title="Hapus Kategori"
+        message={
+          deletingCategory ? (
+            <div className="space-y-2">
+              <p>
+                Apakah Anda yakin ingin menghapus kategori{" "}
+                <strong>"{deletingCategory.name}"</strong>?
+              </p>
+              {deletingCategoryUsage > 0 && (
+                <div className="rounded-xl bg-orange-50 border border-orange-200 p-3 text-xs text-orange-800 leading-relaxed">
+                  ⚠️ Kategori ini sedang digunakan oleh{" "}
+                  <strong>{deletingCategoryUsage} transaksi</strong>. Jika dihapus, transaksi tersebut tetap ada di riwayat tetapi tidak memiliki nama kategori.
+                </div>
+              )}
+            </div>
+          ) : null
+        }
+        confirmText="Hapus Kategori"
+        cancelText="Batal"
+        onConfirm={handleConfirmDeleteCategory}
+        onCancel={() => setDeletingCategory(null)}
+      />
     </div>
   );
 }

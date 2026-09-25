@@ -134,8 +134,9 @@ export function TransactionForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-600">Jumlah (Rp)</label>
+        <label htmlFor="tx-amount" className="text-sm font-medium text-slate-600">Jumlah (Rp)</label>
         <input
+          id="tx-amount"
           type="number"
           step="1"
           placeholder="Contoh: 50000"
@@ -173,8 +174,9 @@ export function TransactionForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-600">Kategori</label>
+        <label htmlFor="tx-category" className="text-sm font-medium text-slate-600">Kategori</label>
         <select
+          id="tx-category"
           className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
           {...register("categoryId")}
         >
@@ -191,8 +193,9 @@ export function TransactionForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-600">Tanggal</label>
+        <label htmlFor="tx-date" className="text-sm font-medium text-slate-600">Tanggal</label>
         <input
+          id="tx-date"
           type="date"
           className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
           {...register("date")}
@@ -200,8 +203,9 @@ export function TransactionForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-600">Catatan (opsional)</label>
+        <label htmlFor="tx-note" className="text-sm font-medium text-slate-600">Catatan (opsional)</label>
         <input
+          id="tx-note"
           type="text"
           placeholder="Contoh: Beli makan siang"
           className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
